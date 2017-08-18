@@ -41,5 +41,22 @@ namespace MrFixIt.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult JobDone(string job)
+        {
+            int jobId;
+            int.TryParse(job, out jobId);
+
+            Worker worker = db.Workers.FirstOrDefault(w => w.UserName == User.Identity.Name);
+            Job finishedJob = db.Jobs.FirstOrDefault(j => j.JobId == jobId);
+            worker.Avaliable = true;
+            finishedJob.Completed = true;
+
+            db.Entry(worker).State = EntityState.Modified;
+            db.Entry(finishedJob).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(finishedJob.Title);
+        }
     }
 }

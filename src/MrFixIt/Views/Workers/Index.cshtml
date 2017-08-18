@@ -1,19 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-
-@if (User.Identity.IsAuthenticated)
+﻿@if (User.Identity.IsAuthenticated)
 {
-
     <div class="text-center">
         <h4>Hello Worker @Model.FirstName @Model.LastName. You are Logged In</h4>
         <h3>Your Current Jobs:</h3>
         @foreach (var Job in Model.Jobs)
         {
+            <hr />
             <h5>@Job.Title</h5>
+            <form action="JobDone" class="jobDone">
+                <input type="hidden" name="Job" value="@Job.JobId" />
+                <button type="submit">Done?</button>
+            </form>
 
         }
         @if (Model.Avaliable)
@@ -26,3 +23,21 @@
         }
     </div>
 }
+
+<script>
+    $(".jobDone").submit(function (event) {
+        console.log("HELLO");
+        event.preventDefault();
+        $.ajax({
+            url: '@Url.Action("ClaimJob")',
+            type: 'POST',
+            data: $(this).serialize(),
+            datatype: 'text',
+            success: function (result) {
+                console.log("TESTING");
+                var string = " has been claimed by ";
+                $("claimed").html(result.Title + string);
+            }
+        });
+    });
+</script>

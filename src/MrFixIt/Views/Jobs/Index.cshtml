@@ -4,40 +4,45 @@
 </div>
 @foreach (var Job in Model)
 {
-    <ul>
-        <li>@Job.Title</li>
-        <li>
-            <ul>
-                <li>@Job.Description</li>
-            </ul>
-        </li>
-            @if (Job.Worker == null)
-            { 
-
-                <li class="btn">This job is unclaimed.
-
-                    <form action="ClaimJob" class="claimJob">
-                        <input type="hidden" name="Job" value="@Job.JobId"/>
-                        <button type="submit">Claim</button>
-                    </form>
-                </li>
-            }
-            else
-            {
-                <li class="invisibleLI"><p>This job has been claimed by @Job.Worker.FirstName</p></li>
-                @if(User.Identity.Name == Job.Worker.UserName)
+    @if (Job.Completed == false)
+    {
+        <ul>
+            <li>@Job.Title</li>
+            <li>
+                <ul>
+                    <li>@Job.Description</li>
+                </ul>
+            </li>
+                @if (Job.Worker == null)
                 {
-                    <li class="invisibleLI">
-                            <form action="JobDone" class="jobDone">
+
+                    <li class="btn">This job is unclaimed.
+
+                        <form action="ClaimJob" class="claimJob">
                             <input type="hidden" name="Job" value="@Job.JobId"/>
-                            <button type="submit">Done?</button>
+                            <button type="submit">Claim</button>
                         </form>
                     </li>
                 }
-            }
-    </ul>
-    <div class="claimed"></div>
-    <hr />
+                else
+                {
+                    <li class="invisibleLI"><p>This job has been claimed by @Job.Worker.FirstName</p></li>
+                    @if (User.Identity.Name == Job.Worker.UserName)
+                    {
+                        <li class="invisibleLI">
+                                <form action="JobDone" class="jobDone">
+                                <input type="hidden" name="Job" value="@Job.JobId"/>
+                                <button type="submit">Done?</button>
+                            </form>
+
+                            <div id="isCompleted"></div>
+                        </li>
+                    }
+                }
+        </ul>
+        <div class="claimed"></div>
+        <hr />
+    }
 }
 
 <script>
@@ -52,6 +57,21 @@
             success: function (result) {
                 var string = " has been claimed by ";
                 $("claimed").html(result.Title + string);
+            }
+        });
+    });
+    $(".jobDone").submit(function (event) {
+        event.preventDefault();
+        console.log($(this).serialize());
+        $.ajax({
+            url: '@Url.Action("JobDone")',
+            type: 'POST',
+            data: $(this).serialize(),
+            datatype: 'text',
+            success: function (result) {
+                console.log($(this).serialize());
+                var string = " has been completed!"
+                $("#isCompleted").html(result + string);
             }
         });
     });
