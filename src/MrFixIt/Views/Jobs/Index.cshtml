@@ -11,19 +11,32 @@
 {
     <ul>
         <li>@Job.Title</li>
-        <ul>
-            <li>@Job.Description</li>
-        </ul>
-        @if (Job.Worker == null)
-        {
-        <li class="btn">This job is unclaimed.
+        <li>
+            <ul>
+                <li>@Job.Description</li>
+            </ul>
+        </li>
 
-        <form action="claimJob" class="claimJob">
-            <input type="hidden" value="@Job"/>
-            <button type="submit"></button>
-        </form>
-        <div class="claimed"></div>
+            @if (Job.Worker == null)
+            { 
+
+                <li class="btn">This job is unclaimed.
+
+                <form action="ClaimJob" class="claimJob">
+                    <input type="hidden" value="@Job"/>
+                    <button type="submit">Claim</button>
+                </form>
+
+                </li>
+            }
+            else
+            {
+                <li><p>This job has been claimed by @Job.Worker</p></li>
+            }
+        
     </ul>
+    
+    <div class="claimed"></div>
     <hr />
 }
 
