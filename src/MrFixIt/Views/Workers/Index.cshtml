@@ -5,12 +5,17 @@
         <h3>Your Current Jobs:</h3>
         @foreach (var Job in Model.Jobs)
         {
-            <hr />
-            <h5>@Job.Title</h5>
-            <form action="JobDone" class="jobDone">
-                <input type="hidden" name="Job" value="@Job.JobId" />
-                <button type="submit">Done?</button>
-            </form>
+            @if(Job.Completed == false)
+            {
+                <hr />
+                <h5>@Job.Title</h5>
+                <form action="JobDone" class="jobDone">
+                    <input type="hidden" name="Job" value="@Job.JobId" />
+                    <button type="submit">Done?</button>
+                </form>
+
+
+            }
 
         }
         @if (Model.Avaliable)
@@ -37,6 +42,21 @@
                 console.log("TESTING");
                 var string = " has been claimed by ";
                 $("claimed").html(result.Title + string);
+            }
+        });
+    });
+    $(".jobDone").submit(function (event) {
+        event.preventDefault();
+        console.log($(this).serialize());
+        $.ajax({
+            url: '@Url.Action("JobDone")',
+            type: 'POST',
+            data: $(this).serialize(),
+            datatype: 'text',
+            success: function (result) {
+                console.log($(this).serialize());
+                var string = " has been completed!"
+                $("#isCompleted").html(result + string);
             }
         });
     });
