@@ -2,21 +2,31 @@
 {
     <div class="text-center">
         <h4>Hello Worker @Model.FirstName @Model.LastName. You are Logged In</h4>
-        <h3>Your Current Jobs:</h3>
-        @foreach (var Job in Model.Jobs)
+        <h3>Your Current Job:</h3>
+        @foreach(var Job in Model.Jobs)
         {
-            @if(Job.Worker == null)
+            @if(Job.Worker.UserName == User.Identity.Name && Job.Completed == false)
             {
-                <hr />
-                <h5>@Job.Title</h5>
+                @Job.Title
                 <form action="JobDone" class="jobDone">
                     <input type="hidden" name="Job" value="@Job.JobId" />
                     <button type="submit">Done?</button>
                 </form>
-
-
+                <hr />
             }
+        }
 
+        <br /><br />
+
+        <h3>Your Previous Jobs</h3>
+
+        @foreach (var Job in Model.Jobs)
+        {
+            @if(Job.Worker.UserName == Model.UserName)
+            {
+                <hr />
+                <h5>@Job.Title</h5>
+            }
         }
     </div>
 }
