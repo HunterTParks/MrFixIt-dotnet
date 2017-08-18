@@ -22,7 +22,7 @@
 
         @foreach (var Job in Model.Jobs)
         {
-            @if(Job.Worker.UserName == Model.UserName)
+            @if(Job.Worker.UserName == Model.UserName && Job.Completed == true)
             {
                 <hr />
                 <h5>@Job.Title</h5>
