@@ -55,6 +55,10 @@ namespace MrFixIt.Controllers
             int.TryParse(job, out jobId);
             Worker test = db.Workers.FirstOrDefault(i => i.UserName == User.Identity.Name);
             Job findJob = db.Jobs.FirstOrDefault(j => j.JobId == jobId);
+            if (test.Avaliable == false)
+            {
+                return Json(job);
+            }
             findJob.Worker = test;
             test.Avaliable = false;
             db.Entry(test).State = EntityState.Modified;

@@ -4,45 +4,47 @@
 </div>
 @foreach (var Job in Model)
 {
-    @if (Job.Completed == false)
-    {
-        <ul>
-            <li>@Job.Title</li>
-            <li>
-                <ul>
-                    <li>@Job.Description</li>
-                </ul>
-            </li>
-                @if (Job.Worker == null)
+    <ul>
+        <li>@Job.Title</li>
+        <li>
+            <ul>
+                <li>@Job.Description</li>
+                <li><div class="claimed"></div></li>
+            </ul>
+        </li>
+            @if (Job.Worker == null)
+            {
+                <li class="btn">This job is unclaimed.                
+                    <form action="ClaimJob" class="claimJob">
+                        <input type="hidden" name="Job" value="@Job.JobId"/>
+                        <button type="submit">Claim</button>
+                    </form>
+                    <div class="claimed"></div>
+                </li>
+            }
+            else
+            {
+                <li class="invisibleLI"><p>This job has been claimed by @Job.Worker.FirstName</p></li>
+                @if (User.Identity.Name == Job.Worker.UserName && Job.Completed == false)
                 {
-
-                    <li class="btn">This job is unclaimed.
-
-                        <form action="ClaimJob" class="claimJob">
+                    <li class="invisibleLI">
+                            <form action="JobDone" class="jobDone">
                             <input type="hidden" name="Job" value="@Job.JobId"/>
-                            <button type="submit">Claim</button>
+                            <button type="submit">Done?</button>
                         </form>
+
+                        <div id="isCompleted"></div>
                     </li>
                 }
                 else
                 {
-                    <li class="invisibleLI"><p>This job has been claimed by @Job.Worker.FirstName</p></li>
-                    @if (User.Identity.Name == Job.Worker.UserName)
-                    {
-                        <li class="invisibleLI">
-                                <form action="JobDone" class="jobDone">
-                                <input type="hidden" name="Job" value="@Job.JobId"/>
-                                <button type="submit">Done?</button>
-                            </form>
+                    <li>This Job has been completed</li>
 
-                            <div id="isCompleted"></div>
-                        </li>
-                    }
                 }
+            }
         </ul>
-        <div class="claimed"></div>
         <hr />
-    }
+
 }
 
 <script>
@@ -55,7 +57,14 @@
             data: $(this).serialize(),
             datatype: 'text',
             success: function (result) {
-                var string = " has been claimed by ";
+                if (typeof(string)){
+                    var string = " is not available! You are already assigned a job!";
+                    console.log("TESTING HEHHHHHHA");
+                }
+                else {
+                    var string = " has been claimed by ";
+                    console.log("HELL YEAH TESTING!");
+                }
                 $("claimed").html(result.Title + string);
             }
         });
