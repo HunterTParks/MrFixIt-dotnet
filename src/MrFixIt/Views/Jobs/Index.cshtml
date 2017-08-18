@@ -22,7 +22,7 @@
                 <li class="btn">This job is unclaimed.
 
                     <form action="ClaimJob" class="claimJob">
-                        <input type="hidden" name="Job" value="@Job"/>
+                        <input type="hidden" name="Job" value="@Job.JobId"/>
                         <button type="submit">Claim</button>
                     </form>
                 </li>
@@ -39,12 +39,12 @@
 <script>
     $(".claimJob").submit(function (event) {
         event.preventDefault();
-        console.log("TESTING HELLO");
+        console.log($(this).serialize());
         $.ajax({
             url: '@Url.Action("ClaimJob")',
             type: 'POST',
             data: $(this).serialize(),
-            datatype: 'json',
+            datatype: 'text',
             success: function (result) {
                 var string = " has been claimed by ";
                 $("claimed").html(result.Title + string);
