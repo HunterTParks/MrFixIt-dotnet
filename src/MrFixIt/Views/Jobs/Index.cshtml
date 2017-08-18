@@ -16,26 +16,22 @@
                 <li>@Job.Description</li>
             </ul>
         </li>
-
             @if (Job.Worker == null)
             { 
 
                 <li class="btn">This job is unclaimed.
 
-                <form action="ClaimJob" class="claimJob">
-                    <input type="hidden" value="@Job"/>
-                    <button type="submit">Claim</button>
-                </form>
-
+                    <form action="ClaimJob" class="claimJob">
+                        <input type="hidden" name="Job" value="@Job"/>
+                        <button type="submit">Claim</button>
+                    </form>
                 </li>
             }
             else
             {
                 <li><p>This job has been claimed by @Job.Worker</p></li>
             }
-        
     </ul>
-    
     <div class="claimed"></div>
     <hr />
 }
@@ -43,6 +39,7 @@
 <script>
     $(".claimJob").submit(function (event) {
         event.preventDefault();
+        console.log("TESTING HELLO");
         $.ajax({
             url: '@Url.Action("ClaimJob")',
             type: 'POST',
@@ -50,7 +47,7 @@
             datatype: 'json',
             success: function (result) {
                 var string = " has been claimed by ";
-                $("claimed").html(result.Title + string + User.Identity.Name);
+                $("claimed").html(result.Title + string);
             }
         });
     });
