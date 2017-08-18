@@ -23,13 +23,6 @@
             <button type="submit"></button>
         </form>
         <div class="claimed"></div>
-        @Html.ActionLink("Claim This Job", "Claim", new { @text = @Job.Title, id = Job.JobId })</li>
-        }
-        else
-        {
-            <li class="btn">This Job is claimed by @Job.Worker.FirstName @Job.Worker.LastName</li>
-
-        }
     </ul>
     <hr />
 }
@@ -43,8 +36,8 @@
             data: $(this).serialize(),
             datatype: 'json',
             success: function (result) {
-                var string = "Job Claimed!";
-                $("claimed").html(string);
+                var string = " has been claimed by ";
+                $("claimed").html(result.Title + string + User.Identity.Name);
             }
         });
     });
