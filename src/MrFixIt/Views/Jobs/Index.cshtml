@@ -16,7 +16,14 @@
         </ul>
         @if (Job.Worker == null)
         {
-        <li class="btn">This job is unclaimed. @Html.ActionLink("Claim This Job", "Claim", new { @text = @Job.Title, id = Job.JobId })</li>
+        <li class="btn">This job is unclaimed.
+
+        <form action="claimJob" class="claimJob">
+            <input type="hidden" value="@Job"/>
+            <button type="submit"></button>
+        </form>
+        <div class="claimed"></div>
+        @Html.ActionLink("Claim This Job", "Claim", new { @text = @Job.Title, id = Job.JobId })</li>
         }
         else
         {
@@ -24,8 +31,22 @@
 
         }
     </ul>
-
-
     <hr />
 }
+
+<script>
+    $(".claimJob").submit(function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: '@Url.Action("ClaimJob")',
+            type: 'POST',
+            data: $(this).serialize(),
+            datatype: 'json',
+            success: function (result) {
+                var string = "Job Claimed!";
+                $("claimed").html(string);
+            }
+        });
+    });
+</script>
 
