@@ -9,6 +9,30 @@ This project is to show my understanding of .NET and jQuery by taking a project 
 The front of this project is a crowd-source repair company called **Mr.Fix-it**. Users post jobs on the forum and accept job offers for paid-tasks, essentially an **Angies-list** clone.
 
 ***
+### Instructions
+* [Clone the Repository](https://github.com/HunterTParks/MrFixIt-dotnet)
+* In VS (Visual Studio) / Atom, open the project and navigate to *_AppSettings.json_*
+* Make sure the file has the following ...
+```javascript
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=MrFixIt;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+```
+* Navigate to the Models folder and open the *_MrFixItContext_* and make sure it has the following code...
+```javascript
+options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=MrFixIt;integrated security=True");
+```
+
+* Run the following command
+```console
+$ dotnet ef database update
+```
+* Now you are able to run the application. Run the following command
+```console
+$ dotnet run
+```
+
+***
 ### Tasks Completed | Tasks In progress | Tasks to do
 ##### Completed
 * Users can register and log on
