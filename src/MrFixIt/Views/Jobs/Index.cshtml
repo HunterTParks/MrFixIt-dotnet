@@ -17,7 +17,14 @@
                 <li class="btn">This job is unclaimed.                
                     <form action="ClaimJob" class="claimJob">
                         <input type="hidden" name="Job" value="@Job.JobId"/>
-                        <button type="submit">Claim</button>
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <button type="submit">Claim</button>
+                        }
+                        else
+                        {
+                            <p>You must be signed in to Claim this job!</p>
+                        }
                     </form>
                     <div class="claimed"></div>
                 </li>
@@ -25,7 +32,7 @@
             else
             {
                 <li class="invisibleLI"><p>This job has been claimed by @Job.Worker.FirstName</p></li>
-                @if (User.Identity.Name == Job.Worker.UserName && Job.Completed == false)
+                @if (User.Identity.Name == Job.Worker.UserName)
                 {
                     <li class="invisibleLI">
                             <form action="JobDone" class="jobDone">
@@ -36,15 +43,14 @@
                         <div id="isCompleted"></div>
                     </li>
                 }
-                else
-                {
-                    <li>This Job has been completed</li>
 
+                @if(Job.Completed == true)
+                {
+                    <p>This job has been competed by @Job.Worker.FirstName</p>
                 }
             }
         </ul>
         <hr />
-
 }
 
 <script>

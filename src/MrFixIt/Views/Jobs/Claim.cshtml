@@ -14,6 +14,13 @@
     @Html.HiddenFor(model => model.Description)
 
     <h4>@Model.Title</h4>
-    <input type="submit" value="Claim This Job" />
+    @if(User.Identity.IsAuthenticated)
+    {
+        <input type="submit" value="Claim This Job" />
+    }
+    else
+    {
+        <p>You must be signed in to claim this job!</p>
+    }
 }
 <p>@Html.ActionLink("Back to list", "Index")</p>
